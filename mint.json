@@ -32,7 +32,8 @@
       "group": "PillarX",
       "pages": [
         "introduction",
-        "integration"
+        "create-an-app",
+        "port-an-app"
       ]
     }
   ],
