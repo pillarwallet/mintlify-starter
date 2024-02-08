@@ -8,12 +8,12 @@ Account Abstraction Infrastructure is a simple process.
 The process is as follows:
 
 1. Fork https://github.com/pillarwallet/x
-2. Make a copy of the example app folder. 
+2. Make a copy of the ```src/apps/example-app``` in ```src/apps/``` 
 3. Add your app name into to **allowedApps** in **src/apps/index.ts**
-4. Copy your src folder and associated components from react app into your new app folder.
+4. Copy your src folder and associated components from your projects react app into your new app folder.
 5. Install all necessary packages you need to run your app. 
 6. **OPTIONAL** If it's a Javascript based app and not Typescript, you will have to resolve some Typescript related errors.
-7. Finally, everywhere that transactions are sent, you will have to convert these to use (Etherspot's TransactionKit)[https://etherspot.fyi/transaction-kit/intro]
+7. Finally, everywhere that transactions are sent, you will have to convert these to use [Etherspot's TransactionKit](https://etherspot.fyi/transaction-kit/intro)
 Building transactions with TransactionKit is a simple process and will allow you to use AA features such as batching and sponsoring transactions.
 Our team can help out with anything you need to use TransactionKit.
 8. Once you have confirmed that your app functions correctly, you can open a pull request and the team will review it.
@@ -32,7 +32,7 @@ It uses Uniswap's contracts to find the swap route and complete the swap. It can
 
 ### 2. Make a copy of the example app folder.
 
-Duplicate src/apps/example-app within this directory, this will be your apps home.
+Duplicate ```src/apps/example-app``` within this directory, this will be your apps home.
 
 Update manifest.json with your apps details. You will also have to add an app icon here.
 
@@ -55,17 +55,24 @@ Now your app will be rendered and displayed in the apps section on runtime like 
 ### 4. Copy your src folder and associated components from react app into your new app folder.
 
 Here we'll be using index as our top level file. 
-Ensure it is named index.js/index.tsx and have it export the app.
+Ensure it is named ```index.js``` or ```index.tsx```
 
 <p align="center">
 <img src="/images/port_5.png"  width="500"/>
 </p>
 
+Also make sure it exports the app in this file like so:
+
+```Javascript
+export default App
+```
+
 ### 5. Install all necessary packages you need to run your app. 
 
-Add all the packages your app needs into package.json and install them with ```npm i ```
+In the top level directory of the repo, add all the packages 
+your app needs into package.json and install them with ```npm i ```
 
-### 6. **OPTIONAL** If it's a Javascript based app and not Typescript, you will have to resolve some Typescript related errors.
+### 6. If it's a Javascript based app and not Typescript, you will have to resolve some Typescript related errors.
 
 For instance I had to resolve the following errors in one of my components:
 
@@ -84,41 +91,25 @@ src/apps/example-app-new/components/MintButton.jsx
 On PillarX, each user will use their own Etherspot Smart Contract
 wallet for signing transactions on any app. 
 
-On the non PillarX version of this app I was getting the signer 
-through my Metamask login, now I will convert this to using Etherspot's tooling.
-
 By the time the user gets to the app section, they will already be logged in and have 
 a wallet created, so there is no need for a connect wallet button.
 
 #### Getting the users address
 
-I used the address in my app in multiple places to get balances etc.
-We can easily swap this variable out like so:
-
-Old method to get address:
-``` Javascript
-  const getSigner = async provider => {
-    provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    setSigner(signer)
-    const userAddress = signer.getAddress();
-  }
-```
-
-PillarX method to get address:
+TransactionKit method to get address:
 ``` Javascript
 const userAddress = useWalletAddress('etherspot-prime', CHAIN_ID);
 ```
 
 #### Sending a transaction
 
-We can build the transaction data the exact same way as before, when 
-we go to send them via Etherspot, it's a little different.
+The transaction data is built the exact same way as before, but when 
+we go to actually send them, it's a little different.
 
-In this example we'll show us doing an approval for a token and executing
+In this example we'll show approving an ERC20 token and executing
 a swap, batched in the same transaction. 
 
-First we import the components from TransactionKit
+First import the components from TransactionKit
 
 ```Javascript
 import {
@@ -133,8 +124,6 @@ import {
 Then place these tags in the return part of the component you want
 to use to send the transaction. These can be used to batch together 
 any number of transactions.
-
-Here we will out the components with the values relevant to our transactions.
 
 You can read more about the components [here.](https://etherspot.fyi/transaction-kit/components/EtherspotTransactionKit)
 
@@ -151,7 +140,7 @@ You can read more about the components [here.](https://etherspot.fyi/transaction
         value={'0'}
         data={transaction.data}
         >
-            <button onClick={() => pillarSwap()}>
+            <button onClick={() => sendTransaction()}>
             Approve Token & Swap
             </button>
         </EtherspotTransaction>
@@ -159,16 +148,16 @@ You can read more about the components [here.](https://etherspot.fyi/transaction
 </EtherspotBatches>
 ```
 
-Once we have the transaction ready to send, the user can click on the button which 
-will call the pillarSwap transaction. 
+Once the transaction is ready to send, the user can click on a button which 
+will call a function to execute the transaction. Here we have called it ```sendTransaction()```.
 
-With TransactionKit, we simply call estimate() and send(), and anything within the batches tag
+With TransactionKit, simply call ```estimate()``` and ```send()```, and anything within the batches tag
 will be executed on chain.
 
 ```Javascript
 const { estimate, send } = useEtherspotTransactions();
 
-const pillarSwap = async () => {
+const sendTransaction = async () => {
     await estimate();
     await send();
 }
