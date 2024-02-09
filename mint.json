@@ -33,7 +33,8 @@
       "pages": [
         "introduction",
         "create-an-app",
-        "port-an-app"
+        "port-an-app",
+        "libraries"
       ]
     }
   ],
