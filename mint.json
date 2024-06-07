@@ -13,18 +13,23 @@
   },
   "topbarCtaButton": {
     "name": "PillarX",
-    "url": "https://www.pillar.fi/"
+    "url": "https://www.pillarx.app"
   },
   "anchors": [
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/pillarwallet"
+      "url": "https://github.com/pillarwallet/x"
     },
     {
       "name": "Discord",
       "icon": "discord",
       "url": "https://chat.pillar.fi/"
+    },
+    {
+      "name": "Telegram",
+      "icon": "telegram",
+      "url": "https://t.me/pillarxdevelopers"
     }
   ],
   "navigation": [
@@ -39,8 +44,8 @@
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/pillarwallet",
-    "github": "https://github.com/pillarwallet"
+    "twitter": "https://x.com/px_web3",
+    "github": "https://github.com/pillarwallet/x"
   },
   "modeToggle": {
     "default": "dark",
